@@ -20,11 +20,9 @@
     "plugins": [
         "react",
         "react-hooks",
-        "@typescript-eslint",
-        "prettier"
+        "@typescript-eslint"
     ],
     "rules": {
-        "prettier/prettier": "error",
         "react/prop-types": "off",
 		"react-hooks/exhaustive-deps": "warn",
 		"react/react-in-jsx-scope": "off",
