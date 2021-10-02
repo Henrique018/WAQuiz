@@ -1,6 +1,6 @@
 import { ThemeProvider, CssBaseline } from '@material-ui/core';
 
-import Main from 'components/Main';
+import Main from 'components/Start';
 import theme from 'styles/theme';
 
 function App() {

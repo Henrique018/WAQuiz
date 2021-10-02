@@ -13,7 +13,7 @@ describe('<CustomStack>', () => {
 
     expect(container.firstChild).toMatchInlineSnapshot(`
       <div
-        class="css-riciba-MuiStack-root"
+        class="css-g31w50-MuiStack-root"
       >
         <h1>
           Hello world
