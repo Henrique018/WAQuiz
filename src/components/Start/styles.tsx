@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { styled } from '@mui/material/styles';
-import { Typography, useMediaQuery } from '@material-ui/core';
+import { Typography, Box, useMediaQuery } from '@material-ui/core';
 
 export const CustomTypography = styled(Typography)`
   ${({ theme }) => css`
@@ -8,6 +8,21 @@ export const CustomTypography = styled(Typography)`
     ${useMediaQuery(theme.breakpoints.up('md')) &&
     css`
       font-size: 2rem;
+    `};
+  `}
+`;
+
+export const IllustrationWrapper = styled(Box)`
+  ${({ theme }) => css`
+    svg {
+      margin: ${theme.spacing(6)};
+    }
+    ${useMediaQuery(theme.breakpoints.up('md')) &&
+    css`
+      svg {
+        width: 800px;
+        height: 250px;
+      }
     `};
   `}
 `;

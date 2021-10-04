@@ -1,6 +1,6 @@
 import { ThemeProvider, CssBaseline } from '@material-ui/core';
 
-import Main from 'components/Start';
+import Routes from 'routes';
 import theme from 'styles/theme';
 
 function App() {
@@ -8,7 +8,7 @@ function App() {
     <>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Main />
+        <Routes />
       </ThemeProvider>
     </>
   );

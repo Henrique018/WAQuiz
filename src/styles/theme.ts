@@ -22,6 +22,9 @@ const theme = createTheme({
       main: red[400]
     }
   },
+  shape: {
+    borderRadius: '8px'
+  },
   typography: {
     fontFamily:
       "'Titillium Web', -apple-system, BlinkMacSystemFont,Roboto, Oxygen, Ubuntu, Helvetica Neue, sans-serif",

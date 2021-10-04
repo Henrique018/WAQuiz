@@ -1,3 +1,4 @@
+import Link from 'react-router-dom';
 import { Typography, Button, TextField } from '@material-ui/core';
 
 import QuestionsIllustration from 'components/QuestionsIustration';
@@ -17,7 +18,9 @@ const Start = () => {
         WA Project Quiz
       </Typography>
 
-      <QuestionsIllustration />
+      <S.IllustrationWrapper>
+        <QuestionsIllustration />
+      </S.IllustrationWrapper>
 
       <S.CustomTypography
         variant="body1"
@@ -36,7 +39,7 @@ const Start = () => {
         inputProps={{ inputMode: 'numeric', pattern: '[0-9]*' }}
       />
 
-      <Button variant="contained" color="primary" fullWidth>
+      <Button href="/main" variant="contained" color="primary" fullWidth>
         START
       </Button>
     </CustomStack>
