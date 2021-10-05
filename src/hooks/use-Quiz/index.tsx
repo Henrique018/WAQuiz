@@ -1,6 +1,7 @@
-import React, { useContext, createContext, useState } from 'react';
+import React, { useContext, createContext, useState, useEffect } from 'react';
+import { getFromLocalStorage, saveToLocalStorage } from 'utils/localStorage';
 
-type questionReview = {
+export type questionReview = {
   question: string;
   correctAnswer: string;
   userAnswer: string;
@@ -45,8 +46,18 @@ export const QuizProvider = ({ children }: QuizProviderProps) => {
     []
   );
 
+  useEffect(() => {
+    const dataQ = getFromLocalStorage('questionReview');
+
+    if (dataQ) {
+      setQuestionsReview(dataQ);
+    }
+  }, []);
+
   const addQuestionToReview = (question: questionReview) => {
     setQuestionsReview((prev) => [...prev, question]);
+
+    saveToLocalStorage('questionReview', [...questionsReview, question]);
   };
 
   const checkAnswers = (userAnswer: string, correct: string) => {

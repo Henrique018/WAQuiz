@@ -1,13 +1,14 @@
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { Typography, Button, TextField } from '@material-ui/core';
-import { useHistory } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 import { useQuiz } from 'hooks/use-Quiz';
 import QuestionsIllustration from 'components/QuestionsIustration';
 import CustomStack from 'components/CustomStack';
 
 import * as S from './styles';
+import { getFromLocalStorage } from 'utils/localStorage';
 
 const Start = () => {
   const history = useHistory();
@@ -72,6 +73,12 @@ const Start = () => {
         <Button type="submit" variant="contained" color="primary" fullWidth>
           START
         </Button>
+
+        {!!getFromLocalStorage('questionReview') && (
+          <Button href="/result" fullWidth>
+            checkout your latest quiz
+          </Button>
+        )}
       </form>
     </CustomStack>
   );
