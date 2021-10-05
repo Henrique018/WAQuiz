@@ -1,7 +1,7 @@
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { Typography, Button, TextField } from '@material-ui/core';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 import { useQuiz } from 'hooks/use-Quiz';
 import QuestionsIllustration from 'components/QuestionsIustration';
