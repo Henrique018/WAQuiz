@@ -1,3 +1,5 @@
+This project was deployed to vercel [here](https://wa-quiz.vercel.app/) :sparkles:
+
 # WA Project - Quiz
 
 Test your knowlege with this trivia based app that generates questions of general knowlege
@@ -6,10 +8,11 @@ Test your knowlege with this trivia based app that generates questions of genera
 - Choose how many questions you want
 - Review your right and wrong questions
 
-## Technologies: 
+## Technologies :star2:
 - [React](https://reactjs.org/)
 - [Material UI](https://mui.com/)
 - [Formik](https://formik.org/)
+
 
 ## Get started :rocket: 
 
