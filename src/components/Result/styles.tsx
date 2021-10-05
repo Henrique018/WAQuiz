@@ -10,7 +10,7 @@ export const IllustrationWrapper = styled(Box)`
     ${useMediaQuery(theme.breakpoints.up('md')) &&
     css`
       svg {
-        width: 450px;
+        width: 350px;
         height: 200px;
       }
     `};
@@ -23,8 +23,8 @@ export const QuestionsWrapper = styled(Stack)`
     padding: ${theme.spacing(3)};
     border-radius: ${theme.shape.borderRadius};
     margin: ${theme.spacing(3)};
-    max-height: 400px;
-    overflow-y: scroll;
+    max-height: 500px;
+    overflow-y: auto;
   `};
 `;
 

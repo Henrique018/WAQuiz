@@ -1,12 +1,22 @@
+import { useHistory } from 'react-router-dom';
 import { Typography, Button } from '@material-ui/core';
 import { CheckCircle, HighlightOff } from '@mui/icons-material';
 
-import { CustomStack } from 'components/CustomStack/styles';
+import { useQuiz } from 'hooks/use-Quiz';
+import CustomStack from 'components/CustomStack';
 import ResultIllustration from 'components/ResultIllustration';
 
 import * as S from './styles';
 
 const Result = () => {
+  const history = useHistory();
+  const { correctAnswers, wrongAnswers, resetInfo, questionsReview } =
+    useQuiz();
+
+  const handleStartAgain = () => {
+    resetInfo();
+    history.push('/');
+  };
   return (
     <CustomStack>
       <Typography variant="h2" color="text.secondary" fontSize="1.7rem">
@@ -23,7 +33,7 @@ const Result = () => {
         fontSize="1rem"
         fontWeight="bold"
       >
-        Correct answers: 5
+        Correct answers: {correctAnswers}
       </Typography>
       <Typography
         variant="body1"
@@ -31,48 +41,41 @@ const Result = () => {
         fontSize="1rem"
         fontWeight="bold"
       >
-        Incorrect answers: 4
+        Incorrect answers: {wrongAnswers}
       </Typography>
 
       <S.QuestionsWrapper>
-        <S.Question>
-          <Typography variant="h2" fontSize="1.8em">
-            Questão 1
-          </Typography>
-          <S.IconWrapper>
-            <CheckCircle fontSize="small" color="secondary" />
-          </S.IconWrapper>
-          <Typography variant="body1" fontSize="1.4em">
-            Correct Answer: Answer
-          </Typography>
-        </S.Question>
+        {questionsReview.map((q, index) => (
+          <S.Question key={index}>
+            <Typography
+              variant="h2"
+              fontSize="1.3em"
+              fontWeight="bold"
+              dangerouslySetInnerHTML={{ __html: q.question }}
+            />
 
-        <S.Question>
-          <Typography variant="h2" fontSize="1.8em">
-            Questão 2
-          </Typography>
-          <S.IconWrapper>
-            <HighlightOff fontSize="small" color="error" />
-          </S.IconWrapper>
-          <Typography variant="body1" fontSize="1.4em">
-            Correct Answer: Answer
-          </Typography>
-        </S.Question>
-
-        <S.Question>
-          <Typography variant="h2" fontSize="1.8em">
-            Questão 3
-          </Typography>
-          <S.IconWrapper>
-            <HighlightOff fontSize="small" color="error" />
-          </S.IconWrapper>
-          <Typography variant="body1" fontSize="1.4em">
-            Correct Answer: Answer
-          </Typography>
-        </S.Question>
+            <S.IconWrapper>
+              {q.isCorrect ? (
+                <CheckCircle fontSize="small" color="secondary" />
+              ) : (
+                <HighlightOff fontSize="small" color="error" />
+              )}
+            </S.IconWrapper>
+            <Typography variant="body1" fontSize="1em">
+              Correct Answer: {q.correctAnswer}
+            </Typography>
+            <Typography variant="body1" fontSize="1em">
+              Your answer: {q.userAnswer}
+            </Typography>
+          </S.Question>
+        ))}
       </S.QuestionsWrapper>
 
-      <Button variant="contained" color="primary">
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={() => handleStartAgain()}
+      >
         Start again
       </Button>
     </CustomStack>

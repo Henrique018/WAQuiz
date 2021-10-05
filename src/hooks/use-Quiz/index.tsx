@@ -4,6 +4,7 @@ type questionReview = {
   question: string;
   correctAnswer: string;
   userAnswer: string;
+  isCorrect: boolean;
 };
 
 type quizContextType = {
@@ -14,6 +15,7 @@ type quizContextType = {
   addNumberOfQuestions: (number: number) => void;
   checkAnswers: (userAnswer: string, correct: string) => void;
   resetInfo: () => void;
+  addQuestionToReview: (question: questionReview) => void;
 };
 
 const quizContextDefaultValues = {
@@ -23,7 +25,8 @@ const quizContextDefaultValues = {
   questionsReview: [],
   addNumberOfQuestions: () => undefined,
   checkAnswers: () => undefined,
-  resetInfo: () => undefined
+  resetInfo: () => undefined,
+  addQuestionToReview: () => undefined
 };
 
 const QuizContext = createContext<quizContextType>(quizContextDefaultValues);
@@ -37,7 +40,14 @@ export const QuizProvider = ({ children }: QuizProviderProps) => {
     correctAnswers: 0,
     wrongAnswers: 0
   });
-  const [questionsReview, setQuestionsReview] = useState([]);
+
+  const [questionsReview, setQuestionsReview] = useState<questionReview[] | []>(
+    []
+  );
+
+  const addQuestionToReview = (question: questionReview) => {
+    setQuestionsReview((prev) => [...prev, question]);
+  };
 
   const checkAnswers = (userAnswer: string, correct: string) => {
     if (userAnswer === correct) {
@@ -70,6 +80,7 @@ export const QuizProvider = ({ children }: QuizProviderProps) => {
         correctAnswers: answers.correctAnswers,
         wrongAnswers: answers.wrongAnswers,
         questionsReview,
+        addQuestionToReview,
         checkAnswers,
         addNumberOfQuestions,
         resetInfo

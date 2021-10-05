@@ -14,20 +14,24 @@ import mapToQuestions, {
 } from 'utils/mapToQuestions';
 
 const Main = () => {
+  const [iterator, setIterator] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+  const [questions, setQuestions] = useState<QuestionsAndAnswers[] | []>([]);
+
   const history = useHistory();
-  const { numberOfQuestions, resetInfo } = useQuiz();
+  const { numberOfQuestions, addQuestionToReview, resetInfo, checkAnswers } =
+    useQuiz();
+
   const formik = useFormik({
     initialValues: {
       alternative: ''
     },
     onSubmit: ({ alternative }) => {
-      console.log(alternative);
+      console.log({
+        alternative
+      });
     }
   });
-
-  const [isLoading, setIsLoading] = useState(true);
-  const [questions, setQuestions] = useState<QuestionsAndAnswers[] | []>([]);
-  const [iterator, setIterator] = useState(0);
 
   useEffect(() => {
     async function getData() {
@@ -41,7 +45,6 @@ const Main = () => {
           }
         );
         const data = await response.data;
-
         setQuestions(mapToQuestions(data));
         setIsLoading(false);
       } catch (error) {
@@ -57,6 +60,16 @@ const Main = () => {
   };
 
   const handleNext = () => {
+    checkAnswers(formik.values.alternative, questions[iterator].correct_answer);
+
+    addQuestionToReview({
+      question: questions[iterator].question,
+      correctAnswer: questions[iterator].correct_answer,
+      userAnswer: formik.values.alternative,
+      isCorrect:
+        formik.values.alternative === questions[iterator].correct_answer
+    });
+
     const nextNumber = iterator + 1;
     if (nextNumber === numberOfQuestions) {
       history.push('/result');
@@ -107,7 +120,6 @@ const Main = () => {
               </Button>
 
               <Button
-                type="submit"
                 variant="contained"
                 color="secondary"
                 size="large"
