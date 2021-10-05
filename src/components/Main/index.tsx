@@ -1,17 +1,21 @@
+import { useEffect, useState } from 'react';
 import { useFormik } from 'formik';
-import {
-  Typography,
-  Button,
-  Grid,
-  FormControlLabel,
-  RadioGroup,
-  Radio
-} from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
+import { Typography, Button, Grid } from '@material-ui/core';
 
-import { CustomStack } from 'components/CustomStack/styles';
-import * as S from './styles';
+import { useQuiz } from 'hooks/use-Quiz';
+import CustomStack from 'components/CustomStack';
+import Alternatives from 'components/Alternatives';
+import api from 'services/api';
+
+import mapToQuestions, {
+  QuestionPropsResponse,
+  QuestionsAndAnswers
+} from 'utils/mapToQuestions';
 
 const Main = () => {
+  const history = useHistory();
+  const { numberOfQuestions, resetInfo } = useQuiz();
   const formik = useFormik({
     initialValues: {
       alternative: ''
@@ -20,106 +24,104 @@ const Main = () => {
       console.log(alternative);
     }
   });
+
+  const [isLoading, setIsLoading] = useState(true);
+  const [questions, setQuestions] = useState<QuestionsAndAnswers[] | []>([]);
+  const [iterator, setIterator] = useState(0);
+
+  useEffect(() => {
+    async function getData() {
+      try {
+        const response = await api.get<Promise<QuestionPropsResponse>>(
+          '/api.php',
+          {
+            params: {
+              amount: numberOfQuestions
+            }
+          }
+        );
+        const data = await response.data;
+
+        setQuestions(mapToQuestions(data));
+        setIsLoading(false);
+      } catch (error) {
+        console.error('error on fetch', error);
+      }
+    }
+    getData();
+  }, []);
+
+  const handleCancel = () => {
+    resetInfo();
+    history.push('/');
+  };
+
+  const handleNext = () => {
+    const nextNumber = iterator + 1;
+    if (nextNumber === numberOfQuestions) {
+      history.push('/result');
+    } else {
+      setIterator(nextNumber);
+    }
+  };
+
   return (
     <CustomStack>
-      <Typography variant="h2" color="text.secondary" fontSize="1.7rem">
-        Question 1 <span>/ 10</span>
-      </Typography>
+      {isLoading && (
+        <Typography variant="h2" color="text.secondary" fontSize="2rem">
+          Loading questions...
+        </Typography>
+      )}
 
-      <Typography
-        variant="body1"
-        color="text.primary"
-        fontSize="2rem"
-        fontWeight="bold"
-        sx={{ my: '35px' }}
-      >
-        Which of the following is not the name of a “Bond Girl”?
-      </Typography>
+      {questions?.length > 0 && (
+        <>
+          <Typography variant="h2" color="text.secondary" fontSize="1.7rem">
+            Question {iterator + 1}
+            <span style={{ fontSize: '1.4rem' }}> /{numberOfQuestions}</span>
+          </Typography>
 
-      <form onSubmit={formik.handleSubmit}>
-        <RadioGroup aria-label="alternatives" name="alternative">
-          <Grid
-            sx={{ width: '100%' }}
-            container
-            alignItems="center"
-            justifyContent="center"
-            gap="15px"
-          >
-            <Grid item xs={12} md={6}>
-              <S.AlternativeWrapper>
-                <FormControlLabel
-                  sx={{ width: '100%', justifyContent: 'space-around' }}
-                  value="alternative1"
-                  control={<Radio />}
-                  label="Alternative 1"
-                  labelPlacement="start"
-                  onChange={formik.handleChange}
-                />
-              </S.AlternativeWrapper>
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <S.AlternativeWrapper>
-                <FormControlLabel
-                  sx={{ width: '100%', justifyContent: 'space-around' }}
-                  value="alternative2"
-                  control={<Radio />}
-                  label="alternative 2"
-                  labelPlacement="start"
-                  onChange={formik.handleChange}
-                />
-              </S.AlternativeWrapper>
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <S.AlternativeWrapper>
-                <FormControlLabel
-                  sx={{ width: '100%', justifyContent: 'space-around' }}
-                  value="alternative3"
-                  control={<Radio />}
-                  label="alternative 3"
-                  labelPlacement="start"
-                  onChange={formik.handleChange}
-                />
-              </S.AlternativeWrapper>
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <S.AlternativeWrapper>
-                <FormControlLabel
-                  sx={{ width: '100%', justifyContent: 'space-around' }}
-                  value="alternative4"
-                  control={<Radio />}
-                  label="alternative 4"
-                  labelPlacement="start"
-                  onChange={formik.handleChange}
-                />
-              </S.AlternativeWrapper>
-            </Grid>
-          </Grid>
-        </RadioGroup>
-        <Grid container justifyContent="center" gap="15px" mt={3}>
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            sx={{
-              width: '150px'
-            }}
-          >
-            Cancel
-          </Button>
+          <Typography
+            variant="body1"
+            color="text.primary"
+            fontSize="2rem"
+            fontWeight="bold"
+            sx={{ my: '35px' }}
+            dangerouslySetInnerHTML={{ __html: questions[iterator].question }}
+          />
 
-          <Button
-            type="submit"
-            variant="contained"
-            color="secondary"
-            size="large"
-            sx={{
-              width: '150px'
-            }}
-          >
-            Next
-          </Button>
-        </Grid>
-      </form>
+          <form onSubmit={formik.handleSubmit}>
+            <Alternatives
+              answers={questions[iterator].answers}
+              onChange={formik.handleChange}
+            />
+            <Grid container justifyContent="center" gap="15px" mt={3}>
+              <Button
+                variant="contained"
+                color="primary"
+                sx={{
+                  width: '150px'
+                }}
+                onClick={() => handleCancel()}
+              >
+                Cancel
+              </Button>
+
+              <Button
+                type="submit"
+                variant="contained"
+                color="secondary"
+                size="large"
+                sx={{
+                  width: '150px'
+                }}
+                onClick={() => handleNext()}
+              >
+                Next
+              </Button>
+            </Grid>
+          </form>
+        </>
+      )}
     </CustomStack>
   );
 };

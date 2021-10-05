@@ -1,19 +1,24 @@
 import * as Yup from 'yup';
-import { Typography, Button, TextField } from '@material-ui/core';
 import { useFormik } from 'formik';
+import { Typography, Button, TextField } from '@material-ui/core';
+import { useHistory } from 'react-router-dom';
 
+import { useQuiz } from 'hooks/use-Quiz';
 import QuestionsIllustration from 'components/QuestionsIustration';
 import CustomStack from 'components/CustomStack';
 
 import * as S from './styles';
 
 const Start = () => {
+  const history = useHistory();
+  const { addNumberOfQuestions } = useQuiz();
   const formik = useFormik({
     initialValues: {
       numberOfQuestions: ''
     },
     onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
+      addNumberOfQuestions(Number(values.numberOfQuestions));
+      history.push('/main');
     },
     validationSchema: Yup.object({
       numberOfQuestions: Yup.number()
