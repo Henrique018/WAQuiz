@@ -104,7 +104,7 @@ const Main = () => {
               width: '150px'
             }}
           >
-            Back
+            Cancel
           </Button>
 
           <Button

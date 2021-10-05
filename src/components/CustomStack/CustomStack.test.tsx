@@ -12,13 +12,13 @@ describe('<CustomStack>', () => {
     expect(screen.getByRole('heading', { name: /hello world/i }));
 
     expect(container.firstChild).toMatchInlineSnapshot(`
-      <div
-        class="css-g31w50-MuiStack-root"
-      >
-        <h1>
-          Hello world
-        </h1>
-      </div>
-    `);
+		<div
+		  class="css-1qy6j70-MuiStack-root"
+		>
+		  <h1>
+		    Hello world
+		  </h1>
+		</div>
+	`);
   });
 });
